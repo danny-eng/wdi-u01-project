@@ -38,6 +38,14 @@ body {
   left: 85vw;
 }
 
+.fMissile {
+  background-color: red;
+  position: absolute;
+  height: 2px;
+  width: 2px;
+}
+
+/*  Explosion -- no height because the detonate() handles it   */
 .explosion {
   background-color: orange;
   border-radius: 50%;

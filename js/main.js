@@ -42,8 +42,27 @@ function cursorTracker(event){
     mouseY = e.y;
 }
 
+// This handles the missile and its movements.
 function fireMissile(key){
+
+    // creating missile div
+    let projectile = document.createElement("div");
+    projectile.setAttribute("class", "fMissile");
+    document.body.appendChild(projectile);
+
+    // place it at a turret
+    // turret A position = 90vh, 9vw
+    // turret B position = 90vh, 47vw
+    // turret C position = 90vh, 85vw
+
+
+
+    // animate the damned thing
+    requestAnimationFrame(animateMissile);
+
 }
+
+
 
 // The explosion!
 function detonate(x, y){
