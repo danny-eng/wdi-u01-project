@@ -42,30 +42,8 @@ function cursorTracker(event){
     mouseY = e.y;
 }
 
-// This handles the missile and its movements.
+// The explosion.
 function fireMissile(key){
-
-    // creating missile div
-    let projectile = document.createElement("div");
-    projectile.setAttribute("class", "fMissile");
-    document.body.appendChild(projectile);
-
-    // place it at a turret
-    // turret A position = 90vh, 9vw
-    // turret B position = 90vh, 47vw
-    // turret C position = 90vh, 85vw
-
-
-
-    // animate the damned thing
-    requestAnimationFrame(animateMissile);
-
-}
-
-
-
-// The explosion!
-function detonate(x, y){
 
     // Creates a div that uses the explosion class.
     let explosion = document.createElement("div");
@@ -73,10 +51,11 @@ function detonate(x, y){
     document.body.appendChild(explosion);
 
     // Varying explosion size.
-    explosion.style.height = ((Math.random() * 60) + 40) + 'px';
+    let boomScale = (Math.random() * 60) + 40;
+    explosion.style.height = boomScale + 'px';
     explosion.style.width = explosion.style.height;
-    explosion.style.left = (x - 50) + 'px';
-    explosion.style.top = (y - 50) + 'px';
+    explosion.style.left = (mouseX - (boomScale / 2)) + 'px';
+    explosion.style.top = (mouseY - (boomScale / 2)) + 'px';
 
     // Removes after a few seconds so the screen doesn't pollute.
     window.setTimeout(function(){
