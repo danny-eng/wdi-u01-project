@@ -1,0 +1,58 @@
+
+
+/*
+    ARCADE FONT
+*/
+
+body {
+  font-family: 'Press Start 2P', sans-serif;
+}
+
+/*
+    TURRET PLACEMENT
+*/
+
+.turret {
+  height: 2vh;
+  width: 2vw;
+  background-color: red;
+  position: relative;
+  float: left;
+}
+
+/* left + (aWidth/2) = 10 */
+#turret-a {
+  top: 90vh;
+  left: 9vw;
+}
+
+/* left + aWidth + (bWidth/2) = 50 */
+#turret-b {
+  top: 90vh;
+  left: 47vw;
+}
+
+/* left + aWidth + bWidth + (cWidth/2) = 90 */
+#turret-c {
+  top: 90vh;
+  left: 85vw;
+}
+
+.explosion {
+  background-color: orange;
+  border-radius: 50%;
+  position: absolute;
+  animation: explode 1s forwards;
+}
+
+@keyframes explode {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.1);
+  }
+}
