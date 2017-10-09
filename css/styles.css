@@ -39,10 +39,24 @@ body {
 }
 
 .fMissile {
-  background-color: red;
+  background-color: blue;
+  height: 1px;
   position: absolute;
-  height: 2px;
-  width: 2px;
+  transform-origin: center left;
+  z-index: -1;
+  animation: trail 1s linear forwards;
+}
+
+@keyframes trail {
+  0% {
+    transform: opacity(1);
+  }
+  20% {
+    transform: opacity(0.25);
+  }
+  100% {
+    transform: opacity(0);
+  }
 }
 
 /*  Explosion -- no height because the detonate() handles it   */
