@@ -183,3 +183,62 @@ p {
   float: left;
 }
 
+.title {
+  font-size: 36px;
+  position: relative;
+  text-align: center;
+  margin-top: 150px;
+}
+
+.start {
+  font-size: 20px;
+  position: relative;
+  text-align: center;
+  margin-top: 250px;
+  animation: flicker 1s linear infinite;
+}
+
+@keyframes flicker {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.setting {
+  display: inline-block;
+  position: absolute;
+  min-width: 80vw;
+  max-width: 80vw;
+  min-height: 60vh;
+  max-height: 60vh;
+  visibility: hidden;
+  margin-left: 10vw;
+}
+
+.fade-in {
+  animation: openingbox 2s linear forwards;
+}
+
+@keyframes openingbox {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+h2 {
+  margin: 10px;
+}
+
+h3 {
+  margin: 10px;
+}
+
+.flicker {
+  animation: flicker 1s linear infinite;
+}

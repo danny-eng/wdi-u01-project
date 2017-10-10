@@ -1,6 +1,56 @@
 
 
 
+const turret_a = document.getElementById("turret-a");
+const turret_aa = document.getElementById("turret-a-status");
+let ta_ammo = "STANDBY";
+const turret_b = document.getElementById("turret-b");
+const turret_ba = document.getElementById("turret-b-status");
+let tb_ammo = "STANDBY";
+const turret_c = document.getElementById("turret-c");
+const turret_ca = document.getElementById("turret-c-status");
+let tc_ammo = "STANDBY";
+
+showAmmo();
+
+// initiate!
+
+// start menu
+document.addEventListener("click", initiate);
+document.addEventListener("keydown", initiate);
+
+// setting screen
+function initiate(){
+  document.removeEventListener("click", initiate);
+  document.removeEventListener("keydown", initiate);
+  document.getElementsByClassName("title")[0].style.visibility = "hidden";
+  document.getElementsByClassName("start")[0].style.visibility = "hidden";
+  setTimeout(initiate_b, 500);
+}
+
+function initiate_b(){
+  document.getElementsByClassName("setting")[0].style.visibility = "visible";
+  document.getElementsByClassName("setting")[0].className += " fade-in";
+  setTimeout(initiate_c, 3000);
+}
+
+function initiate_c(){
+  document.getElementById("please_wait").innerText = "Press any key to continue";
+  document.getElementById("please_wait").className += " flicker";
+  document.addEventListener("click", initiate_d);
+  document.addEventListener("keydown", initiate_d);
+}
+
+function initiate_d(){
+  document.removeEventListener("click", initiate_d);
+  document.removeEventListener("keydown", initiate_d);
+  document.getElementsByClassName("setting")[0].style.visibility = "hidden";
+}
+
+// start level
+
+
+
 // EXPLOSION LOGIC
 
 // Listen to what key has been pressed!
@@ -45,15 +95,7 @@ function cursorTracker(event){
     mouseY = e.y;
 }
 
-const turret_a = document.getElementById("turret-a");
-const turret_aa = document.getElementById("turret-a-status");
-let ta_ammo = 15;
-const turret_b = document.getElementById("turret-b");
-const turret_ba = document.getElementById("turret-b-status");
-let tb_ammo = 15;
-const turret_c = document.getElementById("turret-c");
-const turret_ca = document.getElementById("turret-c-status");
-let tc_ammo = 15;
+
 
 function showAmmo(){
   if (ta_ammo === 0 || turret_a.getAttribute("class").includes("lost") === true){
@@ -245,7 +287,7 @@ function enemyMissiles(){
 }
 
 function enemySalvo(){
-  for (let i = 0; i < 8; i++){
+  for (let i = 0; i < 20; i++){
     setTimeout(enemyMissiles, Math.random() * 2000);
   }
 }
@@ -306,4 +348,4 @@ function collisionCheck(x, y){
   }
 }
 
-enemySalvo();
+// enemySalvo();
