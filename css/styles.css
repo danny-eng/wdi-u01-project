@@ -26,36 +26,85 @@ body {
 */
 
 .turret {
-  height: 2vh;
-  width: 2vw;
+  height: 3vh;
+  width: 4vw;
   background-color: blue;
-  position: relative;
+  position: fixed;
   float: left;
 }
 
-/* left + (aWidth/2) = 10 */
+/*
+    CITY PLACEMENT
+*/
+
+.city {
+  height: 2vh;
+  width: 2vw;
+  background-color: lightblue;
+  position: fixed;
+  float: left;
+}
+
+/* left + total Left + half of you = x */
+/* left + 0 + 2 = 10 */
 #turret-a {
-  top: -2vh;
-  left: 9vw;
+  top: 87vh;
+  left: 8vw;
 }
 
-/* left + aWidth + (bWidth/2) = 50 */
+/* left + 4 + 1 = 20 */
+#w-city-a {
+  top: 88vh;
+  left: 19vw;
+}
+
+/* left + 6 + 1 = 30 */
+#w-city-b {
+  top: 88vh;
+  left: 29vw;
+}
+
+/* left + 8 + 1 = 40 */
+#w-city-c {
+  top: 88vh;
+  left: 39vw;
+}
+
+/* left + 10 + 2 = 50 */
 #turret-b {
-  top: -2vh;
-  left: 47vw;
+  top: 87vh;
+  left: 48vw;
 }
 
-/* left + aWidth + bWidth + (cWidth/2) = 90 */
+/* left + 14 + 1 = 60 */
+#e-city-a {
+  top: 88vh;
+  left: 59vw;
+}
+
+/* left + 16 + 1 = 70 */
+#e-city-b {
+  top: 88vh;
+  left: 69vw;
+}
+
+/* left + 18 + 1 = 80 */
+#e-city-c {
+  top: 88vh;
+  left: 79vw;
+}
+
+/* left + 20 + 2 = 90 */
 #turret-c {
-  top: -2vh;
-  left: 85vw;
+  top: 87vh;
+  left: 88vw;
 }
 
 /* your lasers */
 .fMissile {
   background-color: lightblue;
   height: 1px;
-  position: absolute;
+  position: fixed;
   transform-origin: center left;
   z-index: -1;
 }
@@ -65,7 +114,7 @@ body {
   background-color: green;
   height: 4px;
   width: 4px;
-  position: absolute;
+  position: fixed;
   border-radius: 50%;
   z-index: -1;
 }
@@ -81,9 +130,11 @@ body {
 
 /*  Explosion -- no height because the detonate() handles it   */
 .explosion {
-  background-color: lightblue;
+  background-color: orange;
   border-radius: 50%;
-  position: absolute;
+  height: 50px;
+  width: 50px;
+  position: fixed;
   animation: explode 1s forwards;
 }
 
@@ -100,7 +151,7 @@ body {
 }
 
 .ground {
-  position: absolute;
+  position: fixed;
   float: left;
   top: 90vh;
   height: 10vh;

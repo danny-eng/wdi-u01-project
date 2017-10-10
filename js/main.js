@@ -48,6 +48,7 @@ function cursorTracker(event){
 // The laser?
 function fireMissile(key){
 
+  if (mouseY < 585){
     // draw the div
     let missileDraw = document.createElement("div");
     missileDraw.setAttribute("class", "fMissile");
@@ -55,7 +56,7 @@ function fireMissile(key){
 
     // calculating positions
     let x_origin = document.documentElement.clientWidth;
-    let y_origin = document.documentElement.clientHeight * 0.88;
+    let y_origin = document.documentElement.clientHeight * 0.87;
 
       if (key === "KeyZ"){
         x_origin = x_origin * 0.1;
@@ -87,11 +88,15 @@ function fireMissile(key){
       missileDraw.remove();
     }, 1000);
 
-    explode();
+    explode(mouseX, mouseY);
+
+  } else {
+    return;
+  }
 
 }
 
-function explode(){
+function explode(x, y){
 
     // Creates a div that uses the explosion class.
     let explosion = document.createElement("div");
@@ -99,11 +104,10 @@ function explode(){
     document.body.appendChild(explosion);
 
     // Varying explosion size.
-    let boomScale = (Math.random() * 60) + 40;
-    explosion.style.height = boomScale + 'px';
-    explosion.style.width = explosion.style.height;
-    explosion.style.left = (mouseX - (boomScale / 2)) + 'px';
-    explosion.style.top = (mouseY - (boomScale / 2)) + 'px';
+    explosion.style.left = (x - 25) + 'px';
+    explosion.style.top = (y - 25) + 'px';
+
+    collisionCheck(x, y);
 
     // Removes after a few seconds so the screen doesn't pollute.
     window.setTimeout(function(){
@@ -138,20 +142,24 @@ function enemyMissiles(){
     missileDraw.style.left = xp + 'px';
     missileDraw.style.top = yp + 'px';
 
-    let x_spd = (x_target - x_entry) / ((Math.random() * 100) + 300);
-    let y_spd = (y_target - y_entry) / ((Math.random() * 100) + 300);
+    let x_spd = (x_target - x_entry) / 500;
+    let y_spd = (y_target - y_entry) / 500;
 
     function draw() {
+      if (yp >= y_target && missileDraw.getAttribute("class").contains("detonated") === false){
+        missileDraw.remove();
+        explode(xp, yp);
+        return;
+      } else {
         requestAnimationFrame(draw);
-        // Drawing code goes here
         xp += x_spd;
         yp += y_spd;
-        console.log(`${xp}, ${yp}`);
         missileDraw.style.left = xp + 'px';
         missileDraw.style.top = yp + 'px';
+      }
     }
-    draw();
 
+    draw();
 }
 
 function enemySalvo(){
@@ -160,5 +168,62 @@ function enemySalvo(){
   }
 }
 
-enemySalvo();
+// collision
 
+function collisionCheck(x, y){
+
+  let buildings = document.getElementsByClassName("obstruct");
+  let activeMissiles = document.getElementsByClassName("eMissile");
+
+  let e_l = x - 25;
+  let e_r = x + 25;
+
+  // explosion span and building span needs to share values
+
+  // e_l, e_r designate explosion left, right
+  // b_l, b_r designate building left, right
+
+  // e_l, e_r, b_l, b_r is a miss
+  // e_l, b_l, e_r, b_r is hit
+  // e_l, b_l, b_r, e_r is hit
+  // b_l, e_l, b_r, e_r is hit
+  // b_l, b_r, e_l, e_r is a miss
+  if (y > 585){
+    for (let i = 0; i < buildings.length; i++){
+      let b_l = buildings[i].getClientRects()[0].x;
+      let b_r = buildings[i].getClientRects()[0].x + buildings[i].getClientRects()[0].width;
+      if (e_r < b_l){
+      } else if (e_l < b_l && b_l < e_r){
+        buildings[i].style.visibility = "hidden";
+      } else if (e_l < b_l && b_r < e_r){
+        buildings[i].style.visibility = "hidden";
+      } else if (e_l < b_r && b_r < e_r){
+        buildings[i].style.visibility = "hidden";
+      } else if (b_r < e_l){
+      } else {
+      }
+    }
+  }
+    for (let i = 0; i < activeMissiles.length; i++){
+      let b_l = activeMissiles[i].getClientRects()[0].x;
+      let b_r = activeMissiles[i].getClientRects()[0].x + activeMissiles[i].getClientRects()[0].width;
+      if (e_r < b_l){
+      } else if (e_l < b_l && b_l < e_r){
+        activeMissiles[i].setAttribute("class",'eMissile detonated');
+        activeMissiles[i].remove();
+      } else if (e_l < b_l && b_r < e_r){
+        activeMissiles[i].setAttribute("class",'eMissile detonated');
+        activeMissiles[i].remove();
+      } else if (e_l < b_r && b_r < e_r){
+        activeMissiles[i].setAttribute("class",'eMissile detonated');
+        activeMissiles[i].remove();
+      } else if (b_r < e_l){
+      } else {
+      }
+    }
+
+
+
+}
+
+enemySalvo();
