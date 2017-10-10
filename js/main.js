@@ -1,5 +1,8 @@
 
 
+let buildings = document.getElementsByClassName("obstruct");
+let the_turrets = document.getElementsByClassName("turret");
+let the_cities = document.getElementsByClassName("city");
 
 const turret_a = document.getElementById("turret-a");
 const turret_aa = document.getElementById("turret-a-status");
@@ -11,13 +14,21 @@ const turret_c = document.getElementById("turret-c");
 const turret_ca = document.getElementById("turret-c-status");
 let tc_ammo = "STANDBY";
 
+let level = 0;
+let score = 0;
+let total_score = 0;
+
 showAmmo();
+
+let cities_remaining = 6;
+let missiles_remaining = 45;
 
 // initiate!
 
 // start menu
 document.addEventListener("click", initiate);
 document.addEventListener("keydown", initiate);
+showAmmo();
 
 // setting screen
 function initiate(){
@@ -45,16 +56,58 @@ function initiate_d(){
   document.removeEventListener("click", initiate_d);
   document.removeEventListener("keydown", initiate_d);
   document.getElementsByClassName("setting")[0].style.visibility = "hidden";
+  startLevel();
 }
 
 // start level
+function startLevel(){
 
+  document.removeEventListener("click", startLevel);
+  document.removeEventListener("keydown", startLevel);
+
+  let sb = document.getElementsByClassName("score")[0];
+  let ss = document.getElementsByClassName("score-screen")[0];
+  sb.style.visibility = "visible";
+  ss.innerHTML = ``;
+  ss.style.visibility = "hidden";
+
+  showScore();
+
+  let f_missiles = document.getElementsByClassName("class", "fMissile");
+  for (let i = 0; i < f_missiles.length; i++){
+    f_missiles[0].remove();
+  }
+
+  level++;
+
+  // buildings reset
+  for (let i = 0; i < the_turrets.length; i++){
+    the_cities[i].setAttribute("class", "city obstruct");
+  }
+  for (let i = 0; i < the_turrets.length; i++){
+    the_turrets[i].setAttribute("class", "turret obstruct");
+  }
+  cities_remaining = 6;
+
+  // ammo reset
+  ta_ammo = 15;
+  tb_ammo = 15;
+  tc_ammo = 15;
+  missiles_remaining = ta_ammo + tb_ammo + tc_ammo;
+
+  showAmmo();
+  enemySalvo();
+
+  document.addEventListener("keydown", inputListener);
+  document.addEventListener("mousemove", cursorTracker);
+
+}
 
 
 // EXPLOSION LOGIC
 
 // Listen to what key has been pressed!
-document.addEventListener("keydown", inputListener);
+// document.addEventListener("keydown", inputListener);
 
 // This handles all the key controls.
 
@@ -84,7 +137,7 @@ function inputListener(event){
 // 2. Make the missile move to the spot you pointed out.
 
 // Listen to your mouse position.
-document.addEventListener("mousemove", cursorTracker);
+// document.addEventListener("mousemove", cursorTracker);
 
 let mouseX = 0;
 let mouseY = 0;
@@ -95,27 +148,26 @@ function cursorTracker(event){
     mouseY = e.y;
 }
 
-
-
 function showAmmo(){
   if (ta_ammo === 0 || turret_a.getAttribute("class").includes("lost") === true){
     turret_aa.innerText = `OUT`;
+    ta_ammo = 0;
   } else {
     turret_aa.innerText = `${ta_ammo}`;
   }
   if (tb_ammo === 0 || turret_b.getAttribute("class").includes("lost") === true){
     turret_ba.innerText = `OUT`;
+    tb_ammo = 0;
   } else {
     turret_ba.innerText = `${tb_ammo}`;
   }
   if (tc_ammo === 0 || turret_c.getAttribute("class").includes("lost") === true){
     turret_ca.innerText = `OUT`;
+    tc_ammo = 0;
   } else {
     turret_ca.innerText = `${tc_ammo}`;
   }
 }
-
-showAmmo();
 
 // The laser?
 function fireMissile(key){
@@ -243,6 +295,14 @@ function explode(x, y){
 
 }
 
+function citiesCount(){
+  for (let i = 0; i < the_cities.length; i++){
+    if (the_cities[i].className.includes(" lost") === true){
+      cities_remaining--;
+    }
+  }
+}
+
 
 // FALLING MISSILES LOGIC
 
@@ -286,17 +346,56 @@ function enemyMissiles(){
 
 }
 
+let intv;
 function enemySalvo(){
   for (let i = 0; i < 20; i++){
     setTimeout(enemyMissiles, Math.random() * 2000);
   }
+  intv = setInterval(checkScreen, 2000);
+}
+
+function checkScreen(){
+
+  let activeMissiles = document.getElementsByClassName("eMissile");
+
+  if (activeMissiles.length > 0){
+    return;
+  } else {
+    scoreScreen();
+  }
+
+}
+
+function scoreScreen(){
+
+  clearInterval(intv);
+  missiles_remaining = ta_ammo + tb_ammo + tc_ammo;
+  citiesCount();
+  total_score += (cities_remaining * 1000) + (missiles_remaining * 100);
+
+  let sb = document.getElementsByClassName("score")[0];
+  let ss = document.getElementsByClassName("score-screen")[0];
+  sb.style.visibility = "hidden";
+  document.removeEventListener("keydown", inputListener);
+  document.removeEventListener("mousemove", cursorTracker);
+  ss.innerHTML = `<h2>Level Score: ${cities_remaining} * 1000 = ${cities_remaining * 1000}</h2><br><h2>Missiles Left: ${missiles_remaining} * 100 = ${missiles_remaining * 100}</h2><br><h2>Total Score: ${total_score}</h2>`;
+  ss.style.visibility = "visible";
+  setTimeout(function(){
+    ss.innerHTML = `<h2>Level Score: ${cities_remaining} * 1000 = ${cities_remaining * 1000}</h2><br><h2>Missiles Left: ${missiles_remaining} * 100 = ${missiles_remaining * 100}</h2><br><h2>Total Score: ${total_score}</h2><br><br><br><h2 class="flicker">Press any key to continue</h2>`;
+    document.addEventListener("keydown", startLevel);
+    document.addEventListener("click", startLevel);
+  }, 4000);
+
+}
+
+function showScore(){
+  document.getElementsByClassName("score")[0].innerText = `Score: ${total_score}`;
 }
 
 // collisions!
 
 function collisionCheck(x, y){
 
-  let buildings = document.getElementsByClassName("obstruct");
   let activeMissiles = document.getElementsByClassName("eMissile");
 
   let e_l = x - 25;
@@ -337,15 +436,19 @@ function collisionCheck(x, y){
   for (let i = 0; i < activeMissiles.length; i++){
     let c_ox = activeMissiles[i].getClientRects()[0].x - 2;
     let c_oy = activeMissiles[i].getClientRects()[0].y - 2;
-    let c_r = 2;
+    let c_r = 4;
 
     let dist = Math.sqrt(Math.pow((c_ox - x),2) + Math.pow((c_oy - y),2));
 
     if (dist < 27){
       activeMissiles[i].className += " detonated";
       activeMissiles[i].style.visibility = "hidden";
+      activeMissiles[i].remove();
     }
   }
+
 }
+
+
 
 // enemySalvo();

@@ -102,7 +102,7 @@ body {
 
 /* your lasers */
 .fMissile {
-  background-color: lightblue;
+  background-color: red;
   height: 1px;
   position: fixed;
   transform-origin: center left;
@@ -112,8 +112,8 @@ body {
 /* enemy missiles */
 .eMissile {
   background-color: green;
-  height: 4px;
-  width: 4px;
+  height: 8px;
+  width: 8px;
   position: fixed;
   border-radius: 50%;
   z-index: -1;
@@ -241,4 +241,20 @@ h3 {
 
 .flicker {
   animation: flicker 1s linear infinite;
+}
+
+h1 {
+  margin: 5px;
+  position: relative;
+}
+
+.score-screen {
+  display: inline-block;
+  position: absolute;
+  min-width: 80vw;
+  max-width: 80vw;
+  min-height: 60vh;
+  max-height: 60vh;
+  visibility: hidden;
+  margin-left: 10vw;
 }
