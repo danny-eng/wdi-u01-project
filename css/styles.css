@@ -159,5 +159,27 @@ body {
   background-color: yellow;
 }
 
+p {
+  color: blue;
+  display: inline-block;
+}
 
+.ammo-bar {
+  margin-top: 3px;
+  margin-left: 8vw;
+}
+
+#turret-a-status {
+  float: left;
+  width: 2vw;
+  padding-right: 38vw;
+}
+#turret-b-status {
+  float: left;
+  width: 2vw;
+  padding-right: 38vw;
+}
+#turret-c-status {
+  float: left;
+}
 

@@ -46,8 +46,34 @@ function cursorTracker(event){
 }
 
 const turret_a = document.getElementById("turret-a");
+const turret_aa = document.getElementById("turret-a-status");
+let ta_ammo = 15;
 const turret_b = document.getElementById("turret-b");
+const turret_ba = document.getElementById("turret-b-status");
+let tb_ammo = 15;
 const turret_c = document.getElementById("turret-c");
+const turret_ca = document.getElementById("turret-c-status");
+let tc_ammo = 15;
+
+function showAmmo(){
+  if (ta_ammo === 0 || turret_a.getAttribute("class").includes("lost") === true){
+    turret_aa.innerText = `OUT`;
+  } else {
+    turret_aa.innerText = `${ta_ammo}`;
+  }
+  if (tb_ammo === 0 || turret_b.getAttribute("class").includes("lost") === true){
+    turret_ba.innerText = `OUT`;
+  } else {
+    turret_ba.innerText = `${tb_ammo}`;
+  }
+  if (tc_ammo === 0 || turret_c.getAttribute("class").includes("lost") === true){
+    turret_ca.innerText = `OUT`;
+  } else {
+    turret_ca.innerText = `${tc_ammo}`;
+  }
+}
+
+showAmmo();
 
 // The laser?
 function fireMissile(key){
@@ -62,109 +88,116 @@ function fireMissile(key){
     let x_origin = document.documentElement.clientWidth;
     let y_origin = document.documentElement.clientHeight * 0.87;
 
-      if (key === "KeyZ" && turret_a.getAttribute("class").includes("lost") === false){
-        x_origin = x_origin * 0.1;
+    if (key === "KeyZ" && turret_a.getAttribute("class").includes("lost") === false && ta_ammo > 0){
+      x_origin = x_origin * 0.1;
 
-        // origin of trail
-        missileDraw.style.left = x_origin + 'px';
-        missileDraw.style.top = y_origin + 'px';
+      // origin of trail
+      missileDraw.style.left = x_origin + 'px';
+      missileDraw.style.top = y_origin + 'px';
 
-        // imagine this is a triangle
-        // trail is the hypotenuse
-        // opposite is y-difference
-        // adjacent is x-difference
-        let opposite = mouseY - y_origin;
-        let adjacent = mouseX - x_origin;
-        let hypotenuse = Math.sqrt(Math.pow(opposite, 2) + Math.pow(adjacent, 2));
-        let angle = Math.atan2(opposite, adjacent) * 180 / Math.PI;
-        missileDraw.style.transform = `rotate(${angle}deg)`;
-        missileDraw.style.width = hypotenuse + `px`;
+      // imagine this is a triangle
+      // trail is the hypotenuse
+      // opposite is y-difference
+      // adjacent is x-difference
+      let opposite = mouseY - y_origin;
+      let adjacent = mouseX - x_origin;
+      let hypotenuse = Math.sqrt(Math.pow(opposite, 2) + Math.pow(adjacent, 2));
+      let angle = Math.atan2(opposite, adjacent) * 180 / Math.PI;
+      missileDraw.style.transform = `rotate(${angle}deg)`;
+      missileDraw.style.width = hypotenuse + `px`;
 
-        // removing clutter
-        window.setTimeout(function(){
-          missileDraw.remove();
-        }, 1000);
+      // removing clutter
+      window.setTimeout(function(){
+        missileDraw.remove();
+      }, 1000);
 
-        explode(mouseX, mouseY);
+      explode(mouseX, mouseY);
+      ta_ammo--;
+      showAmmo();
 
-      }
-      if (key === "KeyX" && turret_b.getAttribute("class").includes("lost") === false){
-        x_origin = x_origin * 0.5;
+    }
+    if (key === "KeyX" && turret_b.getAttribute("class").includes("lost") === false && tb_ammo > 0){
+      x_origin = x_origin * 0.5;
 
-        // origin of trail
-        missileDraw.style.left = x_origin + 'px';
-        missileDraw.style.top = y_origin + 'px';
+      // origin of trail
+      missileDraw.style.left = x_origin + 'px';
+      missileDraw.style.top = y_origin + 'px';
 
-        // imagine this is a triangle
-        // trail is the hypotenuse
-        // opposite is y-difference
-        // adjacent is x-difference
-        let opposite = mouseY - y_origin;
-        let adjacent = mouseX - x_origin;
-        let hypotenuse = Math.sqrt(Math.pow(opposite, 2) + Math.pow(adjacent, 2));
-        let angle = Math.atan2(opposite, adjacent) * 180 / Math.PI;
-        missileDraw.style.transform = `rotate(${angle}deg)`;
-        missileDraw.style.width = hypotenuse + `px`;
+      // imagine this is a triangle
+      // trail is the hypotenuse
+      // opposite is y-difference
+      // adjacent is x-difference
+      let opposite = mouseY - y_origin;
+      let adjacent = mouseX - x_origin;
+      let hypotenuse = Math.sqrt(Math.pow(opposite, 2) + Math.pow(adjacent, 2));
+      let angle = Math.atan2(opposite, adjacent) * 180 / Math.PI;
+      missileDraw.style.transform = `rotate(${angle}deg)`;
+      missileDraw.style.width = hypotenuse + `px`;
 
-        // removing clutter
-        window.setTimeout(function(){
-          missileDraw.remove();
-        }, 1000);
+      // removing clutter
+      window.setTimeout(function(){
+        missileDraw.remove();
+      }, 1000);
 
-        explode(mouseX, mouseY);
+      explode(mouseX, mouseY);
+      tb_ammo--;
+      showAmmo();
 
-      }
-      if (key === "KeyC" && turret_c.getAttribute("class").includes("lost") === false){
-        x_origin = x_origin * 0.9;
+    }
+    if (key === "KeyC" && turret_c.getAttribute("class").includes("lost") === false && tc_ammo > 0){
+      x_origin = x_origin * 0.9;
 
-        // origin of trail
-        missileDraw.style.left = x_origin + 'px';
-        missileDraw.style.top = y_origin + 'px';
+      // origin of trail
+      missileDraw.style.left = x_origin + 'px';
+      missileDraw.style.top = y_origin + 'px';
 
-        // imagine this is a triangle
-        // trail is the hypotenuse
-        // opposite is y-difference
-        // adjacent is x-difference
-        let opposite = mouseY - y_origin;
-        let adjacent = mouseX - x_origin;
-        let hypotenuse = Math.sqrt(Math.pow(opposite, 2) + Math.pow(adjacent, 2));
-        let angle = Math.atan2(opposite, adjacent) * 180 / Math.PI;
-        missileDraw.style.transform = `rotate(${angle}deg)`;
-        missileDraw.style.width = hypotenuse + `px`;
+      // imagine this is a triangle
+      // trail is the hypotenuse
+      // opposite is y-difference
+      // adjacent is x-difference
+      let opposite = mouseY - y_origin;
+      let adjacent = mouseX - x_origin;
+      let hypotenuse = Math.sqrt(Math.pow(opposite, 2) + Math.pow(adjacent, 2));
+      let angle = Math.atan2(opposite, adjacent) * 180 / Math.PI;
+      missileDraw.style.transform = `rotate(${angle}deg)`;
+      missileDraw.style.width = hypotenuse + `px`;
 
-        // removing clutter
-        window.setTimeout(function(){
-          missileDraw.remove();
-        }, 1000);
+      // removing clutter
+      window.setTimeout(function(){
+        missileDraw.remove();
+      }, 1000);
 
-        explode(mouseX, mouseY);
+      explode(mouseX, mouseY);
+      tc_ammo--;
+      showAmmo();
 
-      }
-
+    }
 
   } else {
+
     return;
+
   }
 
 }
 
 function explode(x, y){
 
-    // Creates a div that uses the explosion class.
-    let explosion = document.createElement("div");
-    explosion.setAttribute("class", "explosion");
-    document.body.appendChild(explosion);
+  // Creates a div that uses the explosion class.
+  let explosion = document.createElement("div");
+  explosion.setAttribute("class", "explosion");
+  document.body.appendChild(explosion);
 
-    // Varying explosion size.
-    explosion.style.left = (x - 25) + 'px';
-    explosion.style.top = (y - 25) + 'px';
+  // Varying explosion size.
+  explosion.style.left = (x - 25) + 'px';
+  explosion.style.top = (y - 25) + 'px';
 
-    collisionCheck(x, y);
+  collisionCheck(x, y);
 
-    // Removes after a few seconds so the screen doesn't pollute.
-    window.setTimeout(function(){
-        explosion.remove();
-    }, 1000);
+  // Removes after a few seconds so the screen doesn't pollute.
+  window.setTimeout(function(){
+    explosion.remove();
+  }, 1000);
 
 }
 
@@ -176,46 +209,43 @@ function explode(x, y){
 
 function enemyMissiles(){
 
-    // stuff for targeting
-    let x_entry = Math.random() * document.documentElement.clientWidth;
-    let y_entry = 0;
+  // stuff for targeting
+  let x_entry = Math.random() * document.documentElement.clientWidth;
+  let y_entry = 0;
 
-    let x_target = Math.random() * document.documentElement.clientWidth;
-    let y_target = 0.9 * document.documentElement.clientHeight;
+  let x_target = Math.random() * document.documentElement.clientWidth;
+  let y_target = 0.9 * document.documentElement.clientHeight;
 
-    let xp = x_entry;
-    let yp = y_entry;
+  let xp = x_entry;
+  let yp = y_entry;
 
-    // draw the enemy
-    let missileDraw = document.createElement("div");
-    missileDraw.setAttribute("class", "eMissile");
-    document.body.appendChild(missileDraw);
-
-    missileDraw.style.left = xp + 'px';
-    missileDraw.style.top = yp + 'px';
-
-    let x_spd = (x_target - x_entry) / 500;
-    let y_spd = (y_target - y_entry) / 500;
-
-    function draw() {
-      if (yp >= y_target && missileDraw.getAttribute("class").includes("detonated") === false){
-        missileDraw.remove();
-        explode(xp, yp);
-        return;
-      } else {
-        requestAnimationFrame(draw);
-        xp += x_spd;
-        yp += y_spd;
-        missileDraw.style.left = xp + 'px';
-        missileDraw.style.top = yp + 'px';
-      }
+  // draw the enemy
+  let missileDraw = document.createElement("div");
+  missileDraw.setAttribute("class", "eMissile");
+  document.body.appendChild(missileDraw);
+  missileDraw.style.left = xp + 'px';
+  missileDraw.style.top = yp + 'px';
+  let x_spd = (x_target - x_entry) / 500;
+  let y_spd = (y_target - y_entry) / 500;
+  function draw() {
+    if (yp >= y_target && missileDraw.getAttribute("class").includes("detonated") === false){
+      missileDraw.remove();
+      explode(xp, yp);
+      return;
+    } else {
+      requestAnimationFrame(draw);
+      xp += x_spd;
+      yp += y_spd;
+      missileDraw.style.left = xp + 'px';
+      missileDraw.style.top = yp + 'px';
     }
+  }
+  draw();
 
-    draw();
 }
 
 function enemySalvo(){
-  for (let i = 0; i < 20; i++){
+  for (let i = 0; i < 8; i++){
     setTimeout(enemyMissiles, Math.random() * 2000);
   }
 }
@@ -248,19 +278,20 @@ function collisionCheck(x, y){
       } else if (e_l < b_l && b_l < e_r){
         buildings[i].style.visibility = "hidden";
         buildings[i].className += " lost";
+        showAmmo();
       } else if (e_l < b_l && b_r < e_r){
         buildings[i].style.visibility = "hidden";
         buildings[i].className += " lost";
+        showAmmo();
       } else if (e_l < b_r && b_r < e_r){
         buildings[i].style.visibility = "hidden";
         buildings[i].className += " lost";
+        showAmmo();
       } else if (b_r < e_l){
       } else {
       }
     }
   }
-
-
   for (let i = 0; i < activeMissiles.length; i++){
     let c_ox = activeMissiles[i].getClientRects()[0].x - 2;
     let c_oy = activeMissiles[i].getClientRects()[0].y - 2;
@@ -273,9 +304,6 @@ function collisionCheck(x, y){
       activeMissiles[i].style.visibility = "hidden";
     }
   }
-
-
-
 }
 
 enemySalvo();
