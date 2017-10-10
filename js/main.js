@@ -120,51 +120,45 @@ function explode(){
 
 function enemyMissiles(){
 
-    console.log("spawning!");
-
     // stuff for targeting
     let x_entry = Math.random() * document.documentElement.clientWidth;
     let y_entry = 0;
 
-    let x_target = Math.random() * document.documentElement.clientWidth - 5;
-    let y_target = 0.9 * document.documentElement.clientHeight - 5;
+    let x_target = Math.random() * document.documentElement.clientWidth;
+    let y_target = 0.9 * document.documentElement.clientHeight;
 
-    console.log(`entry: ${x_entry},${y_entry}`);
-    console.log(`target: ${x_target},${y_target}`);
+    let xp = x_entry;
+    let yp = y_entry;
 
     // draw the enemy
     let missileDraw = document.createElement("div");
     missileDraw.setAttribute("class", "eMissile");
     document.body.appendChild(missileDraw);
 
-    // entry
-    missileDraw.style.left = x_entry + 'px';
-    missileDraw.style.top = y_entry + 'px';
+    missileDraw.style.left = xp + 'px';
+    missileDraw.style.top = yp + 'px';
 
-    // draw the enemy
-    let missileDraw2 = document.createElement("div");
-    missileDraw2.setAttribute("class", "eMissile");
-    document.body.appendChild(missileDraw2);
+    let x_spd = (x_target - x_entry) / ((Math.random() * 100) + 300);
+    let y_spd = (y_target - y_entry) / ((Math.random() * 100) + 300);
 
-    // entry
-    missileDraw2.style.left = x_target + 'px';
-    missileDraw2.style.top = y_target + 'px';
-
-    let missileDraw3 = document.createElement("div");
-    missileDraw3.setAttribute("class", "fMissile");
-    document.body.appendChild(missileDraw3);
-
-    missileDraw.style.left = x_entry + 'px';
-    missileDraw.style.top = y_entry + 'px';
-
-    let opposite = y_target - y_entry;
-    let adjacent = x_target - x_entry;
-    let hypotenuse = Math.sqrt(Math.pow(opposite, 2) + Math.pow(adjacent, 2));
-    let angle = Math.atan2(opposite, adjacent) * 180 / Math.PI;
-    missileDraw3.style.transform = `rotate(${angle}deg)`;
-    missileDraw3.style.width = hypotenuse + `px`;
+    function draw() {
+        requestAnimationFrame(draw);
+        // Drawing code goes here
+        xp += x_spd;
+        yp += y_spd;
+        console.log(`${xp}, ${yp}`);
+        missileDraw.style.left = xp + 'px';
+        missileDraw.style.top = yp + 'px';
+    }
+    draw();
 
 }
 
-enemyMissiles();
+function enemySalvo(){
+  for (let i = 0; i < 8; i++){
+    enemyMissiles();
+  }
+}
+
+enemySalvo();
 

@@ -62,12 +62,22 @@ body {
 
 /* enemy missiles */
 .eMissile {
-  background-color: red;
-  height: 10px;
-  width: 10px;
+  background-color: green;
+  height: 4px;
+  width: 4px;
+  position: absolute;
+  border-radius: 50%;
+  z-index: -1;
+}
+
+/* enemy lasers!
+.eMissile {
+  background-color: green;
+  height: 1px;
   position: absolute;
   transform-origin: center left;
-}
+  z-index: -1;
+} */
 
 /*  Explosion -- no height because the detonate() handles it   */
 .explosion {
