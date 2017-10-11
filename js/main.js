@@ -17,11 +17,11 @@ let tc_ammo = "STANDBY";
 let level = 0;
 let score = 0;
 let total_score = 0;
-
-let highScore = parseInt(localStorage.getItem('wdi-de-mc-highScore'));
-if (highScore === null || NaN || undefined){
-  highScore = 0;
+let highScore = 0;
+if (localStorage.getItem("wdi-de-mc-highScore") === null || NaN || undefined){
   localStorage.setItem('wdi-de-mc-highScore', 0);
+} else {
+  highScore = parseInt(localStorage.getItem("wdi-de-mc-highScore"));
 }
 
 showAmmo();
@@ -67,6 +67,7 @@ function initiate_d(){
 
 function restart(){
   level = 0;
+  total_score = 0;
   showScore();
   startLevel();
   document.removeEventListener("click", restart);

@@ -11,3 +11,5 @@ You receive points after each level depending on the number of cities remaining 
 Levels become increasingly more difficult.
 
 Your highest score will be recorded.
+
+[Game is hosted here.](danny-eng-wdi-missile-command.bitballoon.com)
