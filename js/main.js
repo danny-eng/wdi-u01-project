@@ -19,7 +19,7 @@ let score = 0;
 let total_score = 0;
 
 let highScore = parseInt(localStorage.getItem('wdi-de-mc-highScore'));
-if (highScore === null){
+if (highScore === null || NaN || undefined){
   highScore = 0;
   localStorage.setItem('wdi-de-mc-highScore', 0);
 }
