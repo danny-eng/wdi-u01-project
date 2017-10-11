@@ -18,7 +18,11 @@ let level = 0;
 let score = 0;
 let total_score = 0;
 
-let highScore = localStorage.getItem('wdi-de-mc-highScore');
+let highScore = parseInt(localStorage.getItem('wdi-de-mc-highScore'));
+if (highScore === null){
+  highScore = 0;
+  localStorage.setItem('wdi-de-mc-highScore', 0);
+}
 
 showAmmo();
 
@@ -34,10 +38,6 @@ showAmmo();
 
 // setting screen
 function initiate(){
-  while (highScore === null){
-    localStorage.setItem('wdi-de-mc-highScore', 0);
-    highScore = localStorage.getItem('wdi-de-mc-highScore');
-  }
   document.removeEventListener("click", initiate);
   document.removeEventListener("keydown", initiate);
   document.getElementsByClassName("title")[0].style.visibility = "hidden";
@@ -65,13 +65,24 @@ function initiate_d(){
   startLevel();
 }
 
+function restart(){
+  level = 0;
+  showScore();
+  startLevel();
+  document.removeEventListener("click", restart);
+  document.removeEventListener("keydown", restart);
+}
+
+
 // start level
 function startLevel(){
+
+  level++;
 
   document.removeEventListener("click", startLevel);
   document.removeEventListener("keydown", startLevel);
 
-  let sb = document.getElementsByClassName("score")[0];
+  let sb = document.getElementsByClassName("top-bar")[0];
   let ss = document.getElementsByClassName("score-screen")[0];
   sb.style.visibility = "visible";
   ss.innerHTML = ``;
@@ -83,8 +94,6 @@ function startLevel(){
   for (let i = 0; i < f_missiles.length; i++){
     f_missiles[0].remove();
   }
-
-  level++;
 
   // buildings reset
   for (let i = 0; i < the_cities.length; i++){
@@ -311,6 +320,7 @@ function citiesCount(){
   }
 }
 
+let spdConst = Math.max(300, (600 - (level * 30)));
 
 // FALLING MISSILES LOGIC
 
@@ -335,8 +345,8 @@ function enemyMissiles(){
   document.body.appendChild(missileDraw);
   missileDraw.style.left = xp + 'px';
   missileDraw.style.top = yp + 'px';
-  let x_spd = (x_target - x_entry) / 500;
-  let y_spd = (y_target - y_entry) / 500;
+  let x_spd = (x_target - x_entry) / spdConst;
+  let y_spd = (y_target - y_entry) / spdConst;
   function draw() {
     if (yp >= y_target && missileDraw.getAttribute("class").includes("detonated") === false){
       missileDraw.remove();
@@ -351,27 +361,23 @@ function enemyMissiles(){
     }
   }
   draw();
-
 }
 
 let intv;
 function enemySalvo(){
-  for (let i = 0; i < 20; i++){
+  for (let i = 0; i < Math.min(level * 4, 40); i++){
     setTimeout(enemyMissiles, Math.random() * 2000);
   }
   intv = setInterval(checkScreen, 2000);
 }
 
 function checkScreen(){
-
   let activeMissiles = document.getElementsByClassName("eMissile");
-
   if (activeMissiles.length > 0){
     return;
   } else {
     scoreScreen();
   }
-
 }
 
 function scoreScreen(){
@@ -381,39 +387,46 @@ function scoreScreen(){
   citiesCount();
   total_score += (cities_remaining * 1000) + (missiles_remaining * 100);
 
-  let sb = document.getElementsByClassName("score")[0];
+  let sb = document.getElementsByClassName("top-bar")[0];
   let ss = document.getElementsByClassName("score-screen")[0];
   sb.style.visibility = "hidden";
   document.removeEventListener("keydown", inputListener);
   document.removeEventListener("mousemove", cursorTracker);
   if (cities_remaining > 0){
-    ss.innerHTML = `<h2>Level Score: ${cities_remaining} * 1000 = ${cities_remaining * 1000}</h2><br><h2>Missiles Left: ${missiles_remaining} * 100 = ${missiles_remaining * 100}</h2><br><h2>Total Score: ${total_score}</h2>`;
+    ss.innerHTML = `<h2>Cities Left: ${cities_remaining} * 1000 = ${cities_remaining * 1000}</h2><br><h2>Missiles Left: ${missiles_remaining} * 100 = ${missiles_remaining * 100}</h2><br><h2>Total Score: ${total_score}</h2>`;
     ss.style.visibility = "visible";
     setTimeout(function(){
-      ss.innerHTML = `<h2>Level Score: ${cities_remaining} * 1000 = ${cities_remaining * 1000}</h2><br><h2>Missiles Left: ${missiles_remaining} * 100 = ${missiles_remaining * 100}</h2><br><h2>Total Score: ${total_score}</h2><br><br><br><h2 class="flicker">Press any key to continue</h2>`;
+      ss.innerHTML = `<h2>Cities Left: ${cities_remaining} * 1000 = ${cities_remaining * 1000}</h2><br><h2>Missiles Left: ${missiles_remaining} * 100 = ${missiles_remaining * 100}</h2><br><h2>Total Score: ${total_score}</h2><br><br><br><h2 class="flicker">Press any key to continue</h2>`;
       document.addEventListener("keydown", startLevel);
       document.addEventListener("click", startLevel);
     }, 4000);
   } else {
-    if (total_score < highScore){
-      localStorage.setItem('wdi-de-mc-highScore', total_score);
-      highScore = total_score;
+    if (total_score > highScore){
       ss.innerHTML = `<h2>You lost.</h2><br><br><h2>All your cities have been destroyed.</h2><br><h2>Total Score: ${total_score}</h2><br><br><h2>YOU HAVE A NEW HIGH SCORE!</h2>`;
+      highScore = total_score;
+      localStorage.setItem('wdi-de-mc-highScore', highScore);
       ss.style.visibility = "visible";
+      setTimeout(function(){
+        ss.innerHTML = `<h2>You lost.</h2><br><br><h2>All your cities have been destroyed.</h2><br><h2>Total Score: ${total_score}</h2><br><br><h2>YOU HAVE A NEW HIGH SCORE!</h2><br><br><br><h2 class="flicker">Press any key to continue</h2>`;
+        document.addEventListener("keydown", restart);
+        document.addEventListener("click", restart);
+      }, 4000);
     } else {
       ss.innerHTML = `<h2>You lost.</h2><br><br><h2>All your cities have been destroyed.</h2><br><h2>Total Score: ${total_score}</h2>`;
       ss.style.visibility = "visible";
+      setTimeout(function(){
+        ss.innerHTML = `<h2>You lost.</h2><br><br><h2>All your cities have been destroyed.</h2><br><h2>Total Score: ${total_score}</h2><br><br><br><h2 class="flicker">Press any key to continue</h2>`;
+        document.addEventListener("keydown", restart);
+        document.addEventListener("click", restart);
+      }, 4000);
     }
   }
 
 }
 
 function showScore(){
-  document.getElementsByClassName("score")[0].innerText = `Score: ${total_score}`;
-  if (highScore === undefined || null || NaN){
-    highScore = 0;
-  }
-  document.getElementsByClassName("hScore")[0].innerText = `Highest Score: ${highScore}`;
+  document.getElementsByClassName("score")[0].innerText = `${total_score}`;
+  document.getElementsByClassName("hScore")[0].innerText = `${highScore}`;
 }
 
 // collisions!
@@ -472,7 +485,5 @@ function collisionCheck(x, y){
   }
 
 }
-
-
 
 // enemySalvo();
