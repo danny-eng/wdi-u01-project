@@ -321,7 +321,7 @@ function citiesCount(){
   }
 }
 
-let spdConst = Math.max(300, (600 - (level * 30)));
+let spdConst = Math.max(150, (600 - (level * 30)));
 
 // FALLING MISSILES LOGIC
 
@@ -366,7 +366,7 @@ function enemyMissiles(){
 
 let intv;
 function enemySalvo(){
-  for (let i = 0; i < Math.min(level * 4, 40); i++){
+  for (let i = 0; i < Math.min(level * 4, 60); i++){
     setTimeout(enemyMissiles, Math.random() * 2000);
   }
   intv = setInterval(checkScreen, 2000);
